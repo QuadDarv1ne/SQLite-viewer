@@ -2,7 +2,24 @@ import flet as ft
 
 def main(page: ft.Page):
     page.title = "SQLite Viewer"
-    CreateTableButton = ft.ElevatedButton(text="Создать таблицу")
+    
+    CreateTableDialog = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Создание таблицы"),
+        content=ft.Text("Введей название таблицы и нажмите кнопку 'Создать таблицу'."),
+        actions=[
+            ft.TextButton("ОК", on_click=lambda e: CreateTableDialog.open == False),
+            ft.TextButton("Отмена", on_click=lambda e: CreateTableDialog.open == False),
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
+        on_dismiss=lambda e: print("Create table dialog was dismissed!"),
+    )
+    def open_create_table_dialog(e):
+        page.dialog = CreateTableDialog
+        CreateTableDialog.open = True
+        page.update()
+    
+    CreateTableButton = ft.ElevatedButton(text="Создать таблицу", on_click=open_create_table_dialog)
     AddColumnButton = ft.ElevatedButton(text="Добавить столбец")
     page.add(
         ft.Row(
