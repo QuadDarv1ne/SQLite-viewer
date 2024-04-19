@@ -3,18 +3,31 @@ import sql_commands as sq
 
 def main(page: ft.Page):
 
+    
+    def pick_db_result(e: ft.FilePickerResultEvent):
+        selected_db.value = e.files[0].path
+        print(selected_db.value)
     #Инициализация
     page.title = "SQLite Viewer"
+    
     global dbPATH
     plH1 = ft.CupertinoTextField(
             placeholder_text="users",
             bgcolor=ft.colors.WHITE24,
     )
-    dbTable = ft.DataTable(
-        columns=[
-                ft.DataColumn(ft.Text("id")),
-        ],    
-    )
+    dbTable = ft.DataTable()
+    
+
+    pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
+    selected_db = ft.Text()
+    page.overlay.append(pick_db_dialog)
+
+    def import_db(e):
+        pick_db_dialog.pick_files(
+            allow_multiple=False,
+            allowed_extensions=["db"],
+        )
+
 
     #Функция для закрытия диалога
     def close_dlg(dialog):
@@ -46,17 +59,18 @@ def main(page: ft.Page):
         page.update()
     
     #Функция для импорта базы данных
-    def import_db(e):
-
-        pass
+    
     
     #Кнопки
     CreateTableButton = ft.ElevatedButton(icon=ft.icons.TABLE_VIEW, text="Создать таблицу", on_click=open_create_table_dialog)
     AddColumnButton = ft.ElevatedButton(icon=ft.icons.VIEW_COLUMN, text="Добавить столбец")
     ImportDBButton = ft.ElevatedButton(icon=ft.icons.UPLOAD_FILE, text="Импорт", on_click=import_db)
 
+        
     #Основная страница
     page.add(
+
+        #Строка меню
         ft.Row(
             [
                 ImportDBButton,
@@ -64,6 +78,7 @@ def main(page: ft.Page):
                 AddColumnButton,
             ]
         ),
+        #Таблица базы данных
         dbTable,
     )
 
