@@ -13,4 +13,24 @@ def create_database(db_name, table_name):
     conn.commit()
     conn.close()
 
+def get_columns(db_name):
+    conn = sql.connect(db_name)
+    c = conn.cursor()
+    c.execute("SELECT * FROM table_name")
+    columns = [description[0] for description in c.description]
+    conn.commit()
+    conn.close()
+    return columns
+
+
+def get_rows(db_name):
+    conn = sql.connect(db_name)
+    c = conn.cursor()
+    c.execute("SELECT * FROM table_name")
+    rows = c.fetchall()
+    conn.commit()
+    conn.close()
+    print(rows)
+    return rows
+
 #create_database("database.db", "table_name")
