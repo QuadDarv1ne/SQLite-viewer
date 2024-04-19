@@ -1,12 +1,20 @@
 import flet as ft
+import sql_commands as sq
 
 def main(page: ft.Page):
     page.title = "SQLite Viewer"
+    global dbPATH
 
     plH1 = ft.CupertinoTextField(
             placeholder_text="users",
             bgcolor=ft.colors.WHITE24,
             )
+    dbTable = ft.DataTable(
+        columns=[
+                ft.DataColumn(ft.Text("id")),
+        ],
+        
+    )
     def close_dlg(dialog):
         dialog.open = False
         page.update()
@@ -32,45 +40,22 @@ def main(page: ft.Page):
         CreateTableDialog.open = True
         page.update()
     
-    CreateTableButton = ft.ElevatedButton(text="Создать таблицу", on_click=open_create_table_dialog)
-    AddColumnButton = ft.ElevatedButton(text="Добавить столбец")
+    def import_db(e):
+
+        pass
+    
+    CreateTableButton = ft.ElevatedButton(icon=ft.icons.TABLE_VIEW, text="Создать таблицу", on_click=open_create_table_dialog)
+    AddColumnButton = ft.ElevatedButton(icon=ft.icons.VIEW_COLUMN, text="Добавить столбец")
+    ImportDBButton = ft.ElevatedButton(icon=ft.icons.UPLOAD_FILE, text="Импорт", on_click=import_db)
     page.add(
         ft.Row(
             [
+                ImportDBButton,
                 CreateTableButton,
                 AddColumnButton,
             ]
         ),
-        ft.DataTable(
-            columns=[
-                ft.DataColumn(ft.Text("First name")),
-                ft.DataColumn(ft.Text("Last name")),
-                ft.DataColumn(ft.Text("Age"), numeric=True),
-            ],
-            rows=[
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.Text("John")),
-                        ft.DataCell(ft.Text("Smith")),
-                        ft.DataCell(ft.Text("43")),
-                    ],
-                ),
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.Text("Jack")),
-                        ft.DataCell(ft.Text("Brown")),
-                        ft.DataCell(ft.Text("19")),
-                    ],
-                ),
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.Text("Alice")),
-                        ft.DataCell(ft.Text("Wong")),
-                        ft.DataCell(ft.Text("25")),
-                    ],
-                ),
-            ],
-        ),
+        dbTable,
     )
 
 ft.app(target=main)

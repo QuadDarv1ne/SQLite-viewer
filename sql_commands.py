@@ -1,5 +1,6 @@
 import sqlite3 as sql
 
+#conn = sql.connec
 def create_database(db_name, table_name):
     # Подключение к базе данных или создание новой, если её нет
     conn = sql.connect(db_name)
