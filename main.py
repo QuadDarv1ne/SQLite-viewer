@@ -1,7 +1,16 @@
 import flet as ft
 
 def main(page: ft.Page):
+    page.title = "SQLite Viewer"
+    CreateTableButton = ft.ElevatedButton(text="Создать таблицу")
+    AddColumnButton = ft.ElevatedButton(text="Добавить столбец")
     page.add(
+        ft.Row(
+            [
+                CreateTableButton,
+                AddColumnButton,
+            ]
+        ),
         ft.DataTable(
             columns=[
                 ft.DataColumn(ft.Text("First name")),
