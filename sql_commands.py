@@ -30,7 +30,6 @@ def get_rows(db_name):
     rows = c.fetchall()
     conn.commit()
     conn.close()
-    print(rows)
     return rows
 
 #create_database("database.db", "table_name")

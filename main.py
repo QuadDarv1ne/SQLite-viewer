@@ -23,8 +23,8 @@ def main(page: ft.Page):
         
         if dbPATH:
             columns = list(map(lambda x: ft.DataColumn(ft.Text(x)), sq.get_columns(dbPATH)))
-            rows = sq.get_rows(dbPATH)
-            dbTable = ft.DataTable(columns=columns)
+            rows = list(map(lambda x: ft.DataRow(cells=list(map(lambda y: ft.DataCell(ft.Text(y)), x))), sq.get_rows(dbPATH)))
+            dbTable = ft.DataTable(columns=columns, rows=rows)
             page.add(dbTable)
             page.update()
     
