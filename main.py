@@ -24,14 +24,22 @@ def main(page: ft.Page):
         if dbPATH:
             columns = list(map(lambda x: ft.DataColumn(ft.Text(x)), sq.get_columns(dbPATH)))
             rows = list(map(lambda x: ft.DataRow(cells=list(map(lambda y: ft.DataCell(ft.Text(y)), x))), sq.get_rows(dbPATH)))
-            dbTable = ft.DataTable(columns=columns, rows=rows)
+            dbTable = ft.DataTable(
+                                    show_checkbox_column=True,
+                                    column_spacing=200,
+                                    vertical_lines=ft.border.BorderSide(1, "white"),
+                                    border=ft.border.all(2, "white"),
+                                    border_radius=10,
+                                    columns=columns,
+                                    rows=rows,
+                                  )
             page.add(dbTable)
             page.update()
     
     
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)
-    
+
 
 
 
