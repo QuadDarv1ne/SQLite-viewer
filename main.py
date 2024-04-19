@@ -23,7 +23,8 @@ def main(page: ft.Page):
         
         if dbPATH:
             columns = list(map(lambda x: ft.DataColumn(ft.Text(x)), sq.get_columns(dbPATH)))
-            rows = list(map(lambda x: ft.DataRow(cells=list(map(lambda y: ft.DataCell(ft.Text(y)), x))), sq.get_rows(dbPATH)))
+            rows = list(map(lambda x: ft.DataRow(cells=list(map(lambda y: ft.DataCell(ft.TextField(y, border=ft.InputBorder.NONE, on_submit=cell_changed)), x))), sq.get_rows(dbPATH)))
+            global dbTable
             dbTable = ft.DataTable(
                                     show_checkbox_column=True,
                                     column_spacing=200,
@@ -36,9 +37,12 @@ def main(page: ft.Page):
             page.add(dbTable)
             page.update()
     
-    
+    def cell_changed(e):
+        print([[j.content.value for j in i.cells] for i in dbTable.rows])
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)
+
+    
 
 
 
