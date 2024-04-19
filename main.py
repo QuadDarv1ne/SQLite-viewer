@@ -2,14 +2,27 @@ import flet as ft
 
 def main(page: ft.Page):
     page.title = "SQLite Viewer"
-    
+
+    plH1 = ft.CupertinoTextField(
+            placeholder_text="users",
+            bgcolor=ft.colors.WHITE24,
+            )
+    def close_dlg(dialog):
+        dialog.open = False
+        page.update()
+
+    def create_table(e):
+        table_name = plH1.value
+        close_dlg(CreateTableDialog)
+        return table_name
+
     CreateTableDialog = ft.AlertDialog(
         modal=True,
-        title=ft.Text("Создание таблицы"),
-        content=ft.Text("Введей название таблицы и нажмите кнопку 'Создать таблицу'."),
+        title=ft.Text("Название таблицы:"),
+        content=plH1,
         actions=[
-            ft.TextButton("ОК", on_click=lambda e: CreateTableDialog.open == False),
-            ft.TextButton("Отмена", on_click=lambda e: CreateTableDialog.open == False),
+            ft.TextButton("Отмена", on_click=lambda e: close_dlg(CreateTableDialog)),
+            ft.TextButton("ОК", on_click=create_table),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
         on_dismiss=lambda e: print("Create table dialog was dismissed!"),
