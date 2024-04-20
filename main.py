@@ -37,9 +37,36 @@ def main(page: ft.Page):
         page.add(dbTable)
         page.update()
 
+
+    def close_dlg(e):
+        add_row_alert.open = False
+        page.update()
+    
+    add_row_alert = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Добавление записи"),
+            actions=[
+                ft.ElevatedButton(
+                    icon=ft.icons.CLOSE,
+                    text="Отмена",
+                    on_click=close_dlg,
+                ),
+                ft.ElevatedButton(
+                    icon=ft.icons.ADD,
+                    text="Добавить",
+                )
+            ]
+        )
     def add_row(e):
-        for i in sq.get_columns(dbPATH):
-            page.add(ft.TextField(label=i))
+        
+        add_row_alert.content = ft.Column([ft.TextField(label=i) for i in sq.get_columns(dbPATH)])
+        page.dialog = add_row_alert
+        add_row_alert.open = True
+        page.update()
+    
+    def close_dialog_add(e):
+        page.dialog = None
+        page.update()
 
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)
@@ -47,10 +74,12 @@ def main(page: ft.Page):
     
     #Кнопки
     AddColumnButton = ft.ElevatedButton(icon=ft.icons.ADD, text="Добавить запись", on_click=add_row, disabled=True)
-    ImportDBButton = ft.ElevatedButton(icon=ft.icons.UPLOAD_FILE, text="Импорт", on_click=(lambda _: pick_db_dialog.pick_files(
-            allow_multiple=False,
-            allowed_extensions=["db"],
-        )))
+    ImportDBButton = ft.ElevatedButton(icon=ft.icons.UPLOAD_FILE,
+                                       text="Импорт",
+                                       on_click=(lambda _: pick_db_dialog.pick_files(
+                                                 allow_multiple=False,
+                                                 allowed_extensions=["db"],
+                                                )))
     menu = ft.Row(
             [
                 ImportDBButton,
