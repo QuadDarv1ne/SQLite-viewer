@@ -36,14 +36,10 @@ def main(page: ft.Page):
         page.add(menu)
         page.add(dbTable)
         page.update()
-        
+
     def add_row(e):
         for i in sq.get_columns(dbPATH):
             page.add(ft.TextField(label=i))
-    
-
-
-
 
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)
