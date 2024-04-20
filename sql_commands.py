@@ -32,4 +32,24 @@ def get_rows(db_name):
     conn.close()
     return rows
 
+def get_column_types(db_name):
+    conn = sql.connect(db_name)
+    c = conn.cursor()
+    c.execute("PRAGMA table_info(table_name)")
+    column_types = [i[2] for i in c.fetchall()]
+    conn.commit()
+    conn.close()
+    return _sqlite_to_python_type(column_types)
+
+def _sqlite_to_python_type(sqlite_type: list):
+    sqlite_to_python = {
+        'INTEGER': int,
+        'REAL': float,
+        'TEXT': str,
+        'BLOB': bytes,
+        'NULL': type(None)
+    }
+    return [sqlite_to_python.get(x, str) for x in sqlite_type]
+
+
 #create_database("database.db", "table_name")
