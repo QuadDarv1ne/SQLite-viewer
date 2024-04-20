@@ -6,6 +6,8 @@ def main(page: ft.Page):
     page.title = "SQLite Viewer"
     selected_db = ft.Text()
     global dbTable
+    global addFIELDS
+    addFIELDS = []
     dbTable = ft.DataTable()
     page.add(dbTable)
     
@@ -39,8 +41,14 @@ def main(page: ft.Page):
 
 
     def close_dlg(e):
+        add_row_alert.content.clean()
         add_row_alert.open = False
         page.update()
+    
+    def update_table_with_new_row(e):
+        sq.add_row(dbPATH, tuple([i.value for i in addFIELDS]))
+        load_data(dbPATH)
+        close_dlg(e)
     
     add_row_alert = ft.AlertDialog(
             modal=True,
@@ -54,19 +62,20 @@ def main(page: ft.Page):
                 ft.ElevatedButton(
                     icon=ft.icons.ADD,
                     text="Добавить",
+                    on_click=update_table_with_new_row,
                 )
             ]
         )
+    
     def add_row(e):
-        
-        add_row_alert.content = ft.Column([ft.TextField(label=i) for i in sq.get_columns(dbPATH)])
+        for i in sq.get_columns(dbPATH):
+            addFIELDS.append(ft.TextField(label=i))
+        add_row_alert.content = ft.Column(addFIELDS)
+        #add_row_alert.content = ft.Column([ft.TextField(label=i) for i in sq.get_columns(dbPATH)])
         page.dialog = add_row_alert
         add_row_alert.open = True
         page.update()
     
-    def close_dialog_add(e):
-        page.dialog = None
-        page.update()
 
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)

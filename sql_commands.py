@@ -51,5 +51,14 @@ def _sqlite_to_python_type(sqlite_type: list):
     }
     return [sqlite_to_python.get(x, str) for x in sqlite_type]
 
+def add_row(db_name, values):
+    conn = sql.connect(db_name)
+    c = conn.cursor()
+    c.execute(f"INSERT INTO table_name VALUES {str(values)}")
+    conn.commit()
+    conn.close()
+
+#add_row("db/database.db")
+
 
 #create_database("database.db", "table_name")
