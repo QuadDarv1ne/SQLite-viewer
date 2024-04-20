@@ -48,7 +48,7 @@ def main(page: ft.Page):
     def update_table_with_new_row(e):
         sq.add_row(dbPATH, tuple([i.value for i in addFIELDS]))
         close_dlg(e)
-        load_data(dbPATH)
+        #load_data(dbPATH)
         
     
     add_row_alert = ft.AlertDialog(
@@ -90,10 +90,12 @@ def main(page: ft.Page):
                                                  allow_multiple=False,
                                                  allowed_extensions=["db"],
                                                 )))
+    UpdateTableButton = ft.ElevatedButton(icon=ft.icons.UPDATE, text="Обновить таблицу", on_click=load_data)
     menu = ft.Row(
             [
                 ImportDBButton,
                 AddColumnButton,
+                UpdateTableButton
             ]
             )
   
