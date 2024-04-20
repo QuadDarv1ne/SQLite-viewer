@@ -61,10 +61,14 @@ def add_row(db_name, values):
 def del_row(db_name, values, columns):
     conn = sql.connect(db_name)
     c = conn.cursor()
-    c.execute(f"DELETE FROM table_name WHERE {columns[0]} = {values[0]}")
+    conditions = " AND ".join([f"{col} = ?" for col in columns])
+    #print(conditions)
+    sq = f"DELETE FROM table_name WHERE {conditions}"
+    c.execute(sq, values)
     conn.commit()
     conn.close()
 
+#del_row("db/database.db", (1,1,1), get_columns("db/database.db"))
 
 
 #add_row("db/database.db")
