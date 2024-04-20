@@ -24,6 +24,12 @@
 2. Запустите файл `sqlite_editor.py`.
 3. Начните работу с вашей базой данных SQLite!
 
+## Сборка
+
+1. Установите `requirements.txt`
+2. Установите [Flutter SDK](https://docs.flutter.dev/get-started/install/windows/desktop?tab=download)
+3. `flet build windows`
+
 ## Автор
 
 **Маркеев Владислав Валерьевич**  
