@@ -37,7 +37,7 @@ def main(page: ft.Page):
         page.clean()
         page.add(menu)
         page.add(dbTable)
-        page.update()
+        #page.update()
 
 
     def close_dlg(e):
@@ -47,8 +47,9 @@ def main(page: ft.Page):
     
     def update_table_with_new_row(e):
         sq.add_row(dbPATH, tuple([i.value for i in addFIELDS]))
-        load_data(dbPATH)
         close_dlg(e)
+        load_data(dbPATH)
+        
     
     add_row_alert = ft.AlertDialog(
             modal=True,
