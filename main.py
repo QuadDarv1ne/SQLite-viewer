@@ -20,9 +20,19 @@ def main(page: ft.Page):
         load_data(dbPATH) if dbPATH else None
             
     
+    def del_row(e):
+        #print(e.control.data)
+        sq.del_row(dbPATH, e.control.data, sq.get_columns(dbPATH))
     def load_data(dbpath):
         columns = list(map(lambda x: ft.DataColumn(ft.Text(x)), sq.get_columns(dbPATH)))
-        rows = list(map(lambda x: ft.DataRow(cells=list(map(lambda y: ft.DataCell(ft.Text(y)), x))), sq.get_rows(dbPATH)))
+        columns.append(ft.DataColumn(ft.Text("Действия")))
+        rows = []
+        for row in sq.get_rows(dbPATH):
+            n = ft.DataRow()
+            for cell in row:
+                n.cells.append(ft.DataCell(ft.Text(cell)))
+            n.cells.append(ft.DataCell(ft.IconButton(ft.icons.DELETE, data=row, icon_color="red", on_click=del_row)))
+            rows.append(n)
         global dbTable
         dbTable = ft.DataTable(
                                 show_checkbox_column=True,
@@ -76,6 +86,8 @@ def main(page: ft.Page):
         page.dialog = add_row_alert
         add_row_alert.open = True
         page.update()
+    
+    
     
 
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)

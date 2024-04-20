@@ -58,6 +58,15 @@ def add_row(db_name, values):
     conn.commit()
     conn.close()
 
+def del_row(db_name, values, columns):
+    conn = sql.connect(db_name)
+    c = conn.cursor()
+    c.execute(f"DELETE FROM table_name WHERE {columns[0]} = {values[0]}")
+    conn.commit()
+    conn.close()
+
+
+
 #add_row("db/database.db")
 
 
