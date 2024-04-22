@@ -1,13 +1,13 @@
 import sqlite3 as sql
 
 #conn = sql.connec
-def create_database(db_name, table_name):
+def create_database(db_name, table_name, columns):
     # Подключение к базе данных или создание новой, если её нет
     conn = sql.connect(db_name)
     c = conn.cursor()
     
     # Создание таблицы в базе данных
-    c.execute(f"CREATE TABLE {table_name}(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+    c.execute(f"CREATE TABLE {table_name}{columns}")
     
     # Сохранение изменений и закрытие соединения
     conn.commit()

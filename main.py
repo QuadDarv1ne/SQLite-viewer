@@ -7,10 +7,12 @@ def main(page: ft.Page):
     selected_db = ft.Text()
     global dbTable
     global addFIELDS
+    global dbPATH
     addFIELDS = []
     dbTable = ft.DataTable()
     page.add(dbTable)
     
+
 
 
     def pick_db_result(e: ft.FilePickerResultEvent):   
@@ -49,15 +51,35 @@ def main(page: ft.Page):
         page.add(dbTable)
         #page.update()
 
-
-    def close_dlg(e):
+    def create_database_func(e):
+        global dbPATH
+        dbPATH = createdbFIELDS[0].value
+        if not dbPATH.endswith(".db"):
+            dbPATH += ".db"
+        tbNAME = createdbFIELDS[1].value
+        sqlrequestColumns = createdbFIELDS[2].value
+        if not sqlrequestColumns.startswith("(") and not sqlrequestColumns.endswith(")"):
+            sqlrequestColumns = "(" + sqlrequestColumns + ")"
+        sq.create_database(dbPATH, tbNAME, sqlrequestColumns)
+        create_database_alert.open = False
+        page.update()
+    def create_database(e):
+        page.dialog = create_database_alert
+        create_database_alert.open = True
+        page.update()
+    def close_dlg_add_row(e):
         add_row_alert.content.clean()
         add_row_alert.open = False
         page.update()
     
+    def close_dlg_add_database(e):
+        #create_database_alert.content.clean()
+        create_database_alert.open = False
+        page.update()
+    
     def update_table_with_new_row(e):
         sq.add_row(dbPATH, tuple([i.value for i in addFIELDS]))
-        close_dlg(e)
+        close_dlg_add_row(e)
         #load_data(dbPATH)
         
     
@@ -68,7 +90,7 @@ def main(page: ft.Page):
                 ft.ElevatedButton(
                     icon=ft.icons.CLOSE,
                     text="Отмена",
-                    on_click=close_dlg,
+                    on_click=close_dlg_add_row,
                 ),
                 ft.ElevatedButton(
                     icon=ft.icons.ADD,
@@ -77,6 +99,29 @@ def main(page: ft.Page):
                 )
             ]
         )
+    
+    createdbFIELDS = [
+        ft.TextField(label="Имя базы данных"),
+        ft.TextField(label="Имя таблицы"),
+        ft.TextField(label="SQL запрос для столбцов", value="(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+    ]
+    create_database_alert = ft.AlertDialog(
+        modal=True,
+        title=ft.Text("Создание базы данных"),
+        content=ft.Column(createdbFIELDS),
+        actions=[
+            ft.ElevatedButton(
+                icon=ft.icons.CLOSE,
+                text="Отмена",
+                on_click=close_dlg_add_database,
+            ),
+            ft.ElevatedButton(
+                icon=ft.icons.ADD,
+                text="Создать",
+                on_click=create_database_func,
+            )
+        ]
+    )
     
     def add_row(e):
         for i in sq.get_columns(dbPATH):
@@ -89,12 +134,15 @@ def main(page: ft.Page):
     
     
     
+    
+    
 
     pick_db_dialog = ft.FilePicker(on_result=pick_db_result)
     page.overlay.append(pick_db_dialog)
     
     
     #Кнопки
+    AddDBButton = ft.IconButton(icon=ft.icons.ADD, on_click=create_database)
     AddColumnButton = ft.ElevatedButton(icon=ft.icons.ADD, text="Добавить запись", on_click=add_row, disabled=True)
     ImportDBButton = ft.ElevatedButton(icon=ft.icons.UPLOAD_FILE,
                                        text="Импорт",
@@ -105,6 +153,7 @@ def main(page: ft.Page):
     UpdateTableButton = ft.ElevatedButton(icon=ft.icons.UPDATE, text="Обновить таблицу", on_click=load_data)
     menu = ft.Row(
             [
+                AddDBButton,
                 ImportDBButton,
                 AddColumnButton,
                 UpdateTableButton
